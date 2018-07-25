@@ -4,7 +4,9 @@
 """
 
 from fcoin import Fcoin
-import os,csv,time
+import os
+import csv
+import time
 
 
 def start_depth():
@@ -80,5 +82,6 @@ def sync_depth():
                     ibid += 2
         f.close()
 
+
 if __name__ == '__main__':
-    start_depth()
+    start_depth() 

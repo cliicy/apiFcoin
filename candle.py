@@ -5,26 +5,29 @@
 
 
 from fcoin import Fcoin
-import os,csv,time
-import requests
+import os
+import csv
+import time
+# import requests
 
 fcoin = Fcoin()
 fcoin.auth('key ', 'secret')
-sylist = ['btcusdt','ethusdt','bchusdt','ltcusdt','ftusdt','fteth','etcusdt','ftbtc','bnbusdt','btmusdt','zrxeth']
-sDir = os.path.join(os.path.abspath('..'),'..','Fcoin_DL')
-stime = time.strftime('%Y',time.localtime())
+sylist = ['btcusdt', 'ethusdt', 'bchusdt', 'ltcusdt', 'ftusdt', 'fteth', 'etcusdt', 'ftbtc', 'bnbusdt', 'btmusdt', 'zrxeth']
+sDir = os.path.join(os.path.abspath('..'), '..', 'Fcoin_DL')
+stime = time.strftime('%Y', time.localtime())
 
 
 def start_kline():
-     while True:
+    while True:
         try:
-            sync_Kline()
+            sync_kline()
         except Exception as error:
             print(error)
         time.sleep(2)
 
+
 # 取K线数据
-def sync_Kline():
+def sync_kline():
     for sy in sylist:
         sfile = '{0}_{1}_{2}'.format(stime, sy, 'candle.csv')
         sfilepath = os.path.join(sDir,'KLine', sfile)

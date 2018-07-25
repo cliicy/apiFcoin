@@ -1,20 +1,17 @@
 import hmac
 import hashlib
 import requests
-import sys
 import time
 import base64
-import json
-from collections import OrderedDict
+
 
 class Fcoin():
-    def __init__(self,base_url = 'https://api.fcoin.com/v2/'):#  wss://api.fcoin.com/v2/ws
+    def __init__(self,base_url = 'https://api.fcoin.com/v2/'):
         self.base_url = base_url
 
     def auth(self, key, secret):
         self.key = bytes(key,'utf-8') 
         self.secret = bytes(secret, 'utf-8') 
-
 
     def public_request(self, method, api_url, **payload):
         """request public url"""
@@ -32,7 +29,6 @@ class Fcoin():
         sig_str = base64.b64encode(sig_str)
         signature = base64.b64encode(hmac.new(self.secret, sig_str, digestmod=hashlib.sha1).digest())
         return signature
-
 
     def signed_request(self, method, api_url, **payload):
         """request a signed url"""
@@ -73,11 +69,9 @@ class Fcoin():
         if r.status_code == 200:
             return r.json()
 
-
     def get_server_time(self):
         """Get server time"""
         return self.public_request('GET','/public/server-time')['data']
-
 
     def get_currencies(self):
         """get all currencies"""
@@ -130,6 +124,7 @@ class Fcoin():
     def order_result(self, order_id):
         """check order result"""
         return self.signed_request('GET', 'orders/{order_id}/match-results'.format(order_id=order_id))
+
     def get_candle(self,resolution, symbol, **payload):
         """get candle data"""
         return self.public_request('GET', 'market/candles/{resolution}/{symbol}'.format(resolution=resolution, symbol=symbol), **payload)
