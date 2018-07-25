@@ -8,11 +8,12 @@ from fcoin import Fcoin
 import os
 import csv
 import time
-# import requests
+import json
+import config
+
 
 fcoin = Fcoin()
 fcoin.auth('key ', 'secret')
-sylist = ['btcusdt', 'ethusdt', 'bchusdt', 'ltcusdt', 'ftusdt', 'fteth', 'etcusdt', 'ftbtc', 'bnbusdt', 'btmusdt', 'zrxeth']
 sDir = os.path.join(os.path.abspath('..'), '..', 'Fcoin_DL')
 stime = time.strftime('%Y', time.localtime())
 
@@ -28,10 +29,16 @@ def start_kline():
 
 # 取K线数据
 def sync_kline():
-    for sy in sylist:
+    for sy in config.sylist:
+        # for original data
+        sTfile = '{0}_{1}_{2}'.format(stime, sy, 'candle.txt')
+        sTfilepath = os.path.join(sDir, 'KLineM1', sTfile)
+
+        # save original data to csv
         sfile = '{0}_{1}_{2}'.format(stime, sy, 'candle.csv')
-        sfilepath = os.path.join(sDir,'KLine', sfile)
-        candleinfo = fcoin.get_candle('M1', sy)['data']  # M1 = 1分钟线，   取150条数据
+        sfilepath = os.path.join(sDir, 'KLineM1', sfile)
+        rdata = fcoin.get_candle('M1', sy)
+        candleinfo = rdata['data']  # M1 = 1分钟线，   取150条数据
         # print(candleinfo)
         sflag = 'open'
         rFind = False
@@ -52,6 +59,11 @@ def sync_kline():
                     vlist = list(ones.values())
                     w.writerow(vlist)
             f.close()
+
+            # write original data to txt files
+            with open(sTfilepath, 'a+', encoding='utf-8') as tf:
+                tf.writelines(json.dumps(rdata) + '\n')
+                tf.close()
 
 
 if __name__ == '__main__':
