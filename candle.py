@@ -15,6 +15,14 @@ sDir = os.path.join(os.path.abspath('..'),'..','Fcoin_DL')
 stime = time.strftime('%Y',time.localtime())
 
 
+def start_kline():
+     while True:
+        try:
+            sync_Kline()
+        except Exception as error:
+            print(error)
+        time.sleep(2)
+
 # 取K线数据
 def sync_Kline():
     for sy in sylist:
@@ -44,11 +52,5 @@ def sync_Kline():
 
 
 if __name__ == '__main__':
-    try:
-        while True:
-            sync_Kline()
-    except Exception as err:
-        print(err)
-        time.sleep(5)
-        sync_Kline()
+    start_kline()
 

@@ -6,6 +6,16 @@
 from fcoin import Fcoin
 import os,csv,time
 
+
+def start_depth():
+    while True:
+        try:
+            sync_depth()
+        except Exception as err:
+            print(err)
+    time.sleep(2)
+
+
 def sync_depth():
     fcoin = Fcoin()
     # fcoin.auth('key ', 'secret')
@@ -71,10 +81,4 @@ def sync_depth():
         f.close()
 
 if __name__ == '__main__':
-    try:
-        while True:
-            sync_depth()
-    except Exception as err:
-        print(err)
-        time.sleep(5)
-        sync_depth()
+    start_depth()

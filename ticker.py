@@ -27,6 +27,16 @@ headl = [
   "24小时内基准货币成交量",# , 如 btcusdt 中 btc 的量
   "24小时内计价货币成交量"] #, 如 btcusdt 中 usdt 的量
 
+
+def start_ticker():
+    while True:
+        try:
+            sync_ticker()
+        except Exception as err:
+            print(err)
+        time.sleep(2)
+
+
 def sync_ticker():
     sflag = '最新成交价'
     rFind = False
@@ -49,10 +59,4 @@ def sync_ticker():
         f.close()
 
 if __name__ == '__main__':
-    try:
-        while True:
-            sync_ticker()
-    except requests.exceptions.HTTPError as err:
-        print(err)
-        time.sleep(5)
-        sync_ticker()
+    start_ticker()
