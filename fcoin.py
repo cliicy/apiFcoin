@@ -125,8 +125,7 @@ class Fcoin():
         """check order result"""
         return self.signed_request('GET', 'orders/{order_id}/match-results'.format(order_id=order_id))
 
-    def get_candle(self,resolution, symbol, **payload):
+    def get_candle(self, resolution, symbol, **payload):
         """get candle data"""
         return self.public_request('GET', 'market/candles/{resolution}/{symbol}'.format(resolution=resolution, symbol=symbol), **payload)
-
 

@@ -3,6 +3,7 @@
 
 """
 from fcoin import Fcoin
+from config import kline_interval
 import os
 import csv
 import time
@@ -24,7 +25,7 @@ def start_kline():
             print('获取kline第 %s 次' % loop)
         except Exception as error:
             print(error)
-        if SOLUTION == '1m':  # 1分 默认获得150条数据
+        if SOLUTION == 'M1':  # 1分 默认获得150条数据
             time.sleep(9000)  # 150*60
         elif SOLUTION == 'D1':  # 1天 默认传回102条数据
             time.sleep(6120)  # 102*60
@@ -46,7 +47,7 @@ def sync_kline():
     rdata = fcoin.get_candle(SOLUTION, SYM)  # 获取特定solution的kline数据
     candleinfo = rdata['data']
     # if solution = M1 = 1分钟线，   取150条数据
-    # if solution = D1 = 1天线，   取 条数据
+    # if solution = D1 = 1天线，   取102天的数据
     sflag = 'open'
     rFind = False
     print('单次获取的数据量：%s' % len(candleinfo))
@@ -94,6 +95,8 @@ def sync_kline():
 def additem2list(ts, vvlist, sym, ml, vitem):
     vvlist.insert(0, sym)
     vvlist.insert(1, ts)
+    if ml == 'M1':  # when solution is M1, we will write 1m to csv
+        ml = kline_interval
     vvlist.insert(2, ml)
     vvlist.insert(3, vitem['id'])
     vvlist.insert(4, vitem['open'])
