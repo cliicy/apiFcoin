@@ -6,7 +6,6 @@
 
 import pandas as pd 
 from fcoin import Fcoin
-from datetime import datetime
 import os,csv,time
 
 fcoin = Fcoin()

@@ -15,16 +15,19 @@ import config
 fcoin = Fcoin()
 fcoin.auth('key ', 'secret')
 sDir = os.path.join(os.path.abspath('..'), '..', 'Fcoin_DL')
-stime = time.strftime('%Y', time.localtime())
+stime = time.strftime('%Y%m%d', time.localtime())
 
 
 def start_kline():
+    loop = 0
     while True:
         try:
             sync_kline()
+            loop += 1
+            print('获取kline第 %s 次' % loop)
         except Exception as error:
             print(error)
-        time.sleep(2)
+        time.sleep(7200)
 
 
 # 取K线数据
@@ -39,7 +42,9 @@ def sync_kline():
         sfilepath = os.path.join(sDir, 'KLineM1', sfile)
         rdata = fcoin.get_candle('M1', sy)
         candleinfo = rdata['data']  # M1 = 1分钟线，   取150条数据
+        # print('len=%s' % len(candleinfo))
         # print(candleinfo)
+        # return 0
         sflag = 'open'
         rFind = False
         for ones in candleinfo:

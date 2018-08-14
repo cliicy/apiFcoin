@@ -24,10 +24,10 @@ def sync_depth():
     fcoin = Fcoin()
     # fcoin.auth('key ', 'secret')
     sDir = os.path.join(os.path.abspath('..'), '..', 'Fcoin_DL')
-    stime = time.strftime('%Y', time.localtime())
+    stime = time.strftime('%Y%m%d', time.localtime())
     rootn = 'depth'
     level = 'L20'
-    dirname = '{0}{1}'.format(rootn,level)
+    dirname = '{0}{1}'.format(rootn, level)
     # 获取最新的深度明细
     # 买(卖)1价, 买(卖)1量
     depth_head = ['买1价', '买的量数', '卖1价', '卖的量数']
@@ -43,7 +43,7 @@ def sync_depth():
         dpspath = os.path.join(sDir, dirname, dpfile)
 
         rdata = fcoin.get_market_depth(level, sy)
-        depthinfo = rdata['data']# 20 档行情深度 for iask in depthinfo['asks']:
+        depthinfo = rdata['data']  # 20 档行情深度 for iask in depthinfo['asks']:
         bidlists = depthinfo['bids']
         print(bidlists)
         asklists = depthinfo['asks']
