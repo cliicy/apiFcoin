@@ -4,6 +4,8 @@
 """
 from fcoin import Fcoin
 from config import kline_interval
+from enums import Symbol
+from enums import Platform
 import os
 import csv
 import time
@@ -12,7 +14,8 @@ import sys
 
 fcoin = Fcoin()
 fcoin.auth('key ', 'secret')
-sDir = os.path.abspath(os.path.join(os.path.abspath('..'), '..', 'http_fcoin_data', 'kline'))
+# sDir = os.path.abspath(os.path.join(os.path.abspath('..'), '..', 'http_fcoin_data', 'kline'))
+sDir = os.path.abspath(os.path.join(os.path.abspath('..'), 'data', 'rest_http', 'kline'))
 stime = time.strftime('%Y%m%d', time.localtime())
 
 
@@ -26,14 +29,14 @@ def start_kline():
         except Exception as error:
             print(error)
         if SOLUTION == 'M1':  # 1分 默认获得150条数据
-            time.sleep(9000)  # 150*60
+            time.sleep(60)  # 150*60 = 9000
         elif SOLUTION == 'D1':  # 1天 默认传回102条数据
             time.sleep(6120)  # 102*60
 
 
 # 取K线数据
 def sync_kline():
-    sdataDir = os.path.join(sDir, SOLUTION)
+    sdataDir = os.path.join(sDir, stime, SOLUTION)
     # print(sdataDir)
     if not os.path.exists(sdataDir):
         os.makedirs(sdataDir)
@@ -55,7 +58,7 @@ def sync_kline():
         # print(ones)
         # 从服务器得到的数据中没有ts，只有id，根据文档要求，要把获取到数据的时间存入csv文件及数据库中
         ts = int(round(ones['id'] * 1000))
-        ticks = int(round(time.time() * 1000))
+        ticks = ts  # int(round(time.time() * 1000))
         ones['id'] = ts
         kklist = []
         vvlist = []
@@ -93,6 +96,7 @@ def sync_kline():
 
 # add extral items to the original list
 def additem2list(ts, vvlist, sym, ml, vitem):
+    sym = Symbol.convert_to_standard_symbol(Platform.PLATFORM_FCOIN, sym)
     vvlist.insert(0, sym)
     vvlist.insert(1, ts)
     if ml == 'M1':  # when solution is M1, we will write 1m to csv
