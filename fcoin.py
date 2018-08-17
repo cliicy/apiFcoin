@@ -5,12 +5,14 @@ import time
 import base64
 
 
-class Fcoin():
-    def __init__(self,base_url = 'https://api.fcoin.com/v2/'):
+class Fcoin:
+    def __init__(self, base_url='https://api.fcoin.com/v2/'):
         self.base_url = base_url
+        self.key = ''
+        self.secret = ''
 
     def auth(self, key, secret):
-        self.key = bytes(key,'utf-8') 
+        self.key = bytes(key, 'utf-8')
         self.secret = bytes(secret, 'utf-8') 
 
     def public_request(self, method, api_url, **payload):
@@ -33,10 +35,10 @@ class Fcoin():
     def signed_request(self, method, api_url, **payload):
         """request a signed url"""
 
-        param=''
+        param = ''
         if payload:
             sort_pay = sorted(payload.items())
-            #sort_pay.sort()
+            # sort_pay.sort()
             for k in sort_pay:
                 param += '&' + str(k[0]) + '=' + str(k[1])
             param = param.lstrip('&')
