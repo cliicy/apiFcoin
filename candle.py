@@ -48,7 +48,7 @@ class SyncCandle(BaseSync):
         sfilepath = os.path.join(sdataDir, sfile)
 
         # rdata = fcoin.get_candlem1All(SOLUTION, SYM)  # 获取特定solution的kline数据
-        payload = {'limit': 1444}
+        payload = {'limit': 1442}
         rdata = fcoin.get_candle(self.solution, self.sym, **payload)  # 获取特定solution的kline数据
         candleinfo = rdata['data']
 
