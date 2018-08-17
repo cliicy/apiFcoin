@@ -33,12 +33,7 @@ class BaseSync(object):
         self._log.addHandler(console)
 
     def run(self, *args):
-        loop = 0
-        while True:
-            try:
-                self.sync_kline(*args)
-                loop += 1
-                print('获取kline第 %s %s次' % (loop, args))
-            except Exception as error:
-                print(error)
-            time.sleep(86400)  # 24*60*60
+        try:
+            self.sync_kline(*args)
+        except Exception as error:
+            print(error)

@@ -2,9 +2,9 @@ from gevent import monkey
 
 monkey.patch_all()
 import gevent
+from kcandle import SyncMDCandle
 from candle import SyncCandle
 import config
-import sys
 
 
 def run_task():
@@ -12,6 +12,7 @@ def run_task():
     for sy in config.sylist:
         try:
             greenlets.append(gevent.spawn(SyncCandle().run, 'M1', sy))
+            greenlets.append(gevent.spawn(SyncMDCandle().run, 'M1', sy))
         except Exception as e:
             print(e)
     gevent.joinall(greenlets)

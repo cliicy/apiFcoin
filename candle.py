@@ -17,8 +17,7 @@ import json
 import sys
 from fcoinsync import BaseSync
 
-sDir = os.path.abspath(os.path.join(os.path.abspath('..'), 'data', 'rest_http', 'M1All_kline'))
-stime = time.strftime('%Y%m%d', time.localtime())
+
 fcoin = Fcoin()
 fcoin.auth('key ', 'secret')
 
@@ -27,15 +26,20 @@ class SyncCandle(BaseSync):
     def __init__(self):
         self.solution = ''
         self.sym = ''
+        self.sDir = os.path.abspath(os.path.join(os.path.abspath('..'), 'data', 'rest_http', 'M1All_kline'))
         self.platform = Platform.PLATFORM_FCOIN.value
         self.data_type = PlatformDataType.PLATFORM_DATA_KLINE.value
+        self.payload = {'limit': 1442}
+
         BaseSync(self.platform, self.data_type)
 
     # 取K线数据
     def sync_kline(self, *args):
         self.solution = args[0]
         self.sym = args[1]
-        sdataDir = os.path.join(sDir, stime, self.solution)
+        stime = time.strftime('%Y%m%d', time.localtime())
+        sdataDir = os.path.join(self.sDir, stime, self.solution)
+
         # print(sdataDir)
         if not os.path.exists(sdataDir):
             os.makedirs(sdataDir)
@@ -46,15 +50,12 @@ class SyncCandle(BaseSync):
         # save original data to csv
         sfile = '{0}_{1}_{2}{3}'.format(self.data_type, stime, self.sym, '.csv')
         sfilepath = os.path.join(sdataDir, sfile)
-
-        # rdata = fcoin.get_candlem1All(SOLUTION, SYM)  # 获取特定solution的kline数据
-        payload = {'limit': 1442}
-        rdata = fcoin.get_candle(self.solution, self.sym, **payload)  # 获取特定solution的kline数据
+        rdata = fcoin.get_candle(self.solution, self.sym, **self.payload)  # 获取特定solution的kline数据
         candleinfo = rdata['data']
 
         sflag = 'open'
         rFind = False
-        print('单次获取的数据量：%s' % len(candleinfo))
+        # print('单次获取的数据量：%s' % len(candleinfo))
         for ones in candleinfo:
             # print(ones)
             # 从服务器得到的数据中没有ts，只有id，根据文档要求，要把获取到数据的时间存入csv文件及数据库中
