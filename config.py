@@ -5,3 +5,5 @@ syll = ['btcusdt', 'ethusdt', 'bchusdt', 'ltcusdt', 'ftusdt', 'fteth', 'etcusdt'
 sylist = ['btcusdt']  # ,  'ethbtc', 'eosbtc' , 'eosusdt',
 kline_interval = '1m'
 default_solution = 'M1'
+
+
