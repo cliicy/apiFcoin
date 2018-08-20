@@ -31,19 +31,13 @@ class SyncCandle(BaseSync):
         self.bsync.sync_kline(*aparam)
 
     def run(self, *args):
-        # loop = 0
         while True:
-            try:
-                st = time.strftime('%H:%M:%S', time.localtime())
-                # if st == '23:59:00':
-                if st == time_spot:
-                    print('开始获取1440条数据kline数据：一天获取一次')
-                    self.sync_kline(*args)
-                    time.sleep(86400)  # 24*60*60
-                # loop += 1
-                # print('获取kline第 %s 次' % loop)
-            except Exception as error:
-                print(error)
+            st = time.strftime('%H:%M:%S', time.localtime())
+            if st == time_spot:
+                print('开始获取1440条数据kline数据：一天获取一次')
+                self.sync_kline(*args)
+                time.sleep(86400)  # 24*60*60
+            time.sleep(0.1)
 
 
 if __name__ == '__main__':
