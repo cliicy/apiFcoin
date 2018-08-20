@@ -12,6 +12,7 @@ import sys
 from fcoinsync import BaseSync
 from fcoinsync import datadir
 import time
+from config import time_spot
 
 
 class SyncCandle(BaseSync):
@@ -24,7 +25,7 @@ class SyncCandle(BaseSync):
 
     def sync_kline(self, *args):
         self.solution = args[0]
-        payload = {'limit': 1442}
+        payload = {'limit': 1440}
         sdir = os.path.join(datadir, 'rest_http', 'M1All_kline')
         aparam = (args[0], args[1], payload, sdir)
         self.bsync.sync_kline(*aparam)
@@ -34,7 +35,8 @@ class SyncCandle(BaseSync):
         while True:
             try:
                 st = time.strftime('%H:%M:%S', time.localtime())
-                if st == '23:59:00':
+                # if st == '23:59:00':
+                if st == time_spot:
                     print('开始获取1440条数据kline数据：一天获取一次')
                     self.sync_kline(*args)
                     time.sleep(86400)  # 24*60*60

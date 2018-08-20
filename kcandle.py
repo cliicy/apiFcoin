@@ -9,6 +9,7 @@ from enums import Platform
 from enums import PlatformDataType
 from fcoinsync import BaseSync
 from fcoinsync import datadir
+from config import time_spot
 
 
 class SyncMDCandle(BaseSync):
@@ -23,7 +24,8 @@ class SyncMDCandle(BaseSync):
         while True:
             try:
                 st = time.strftime('%H:%M:%S', time.localtime())
-                if st == '23:59:00':
+                # if st == '23:59:00':
+                if st == time_spot:
                     print('开始获取kline数据：')
                     self.sync_kline(*args)
                     if self.solution == 'M1':  # 1分 默认获得150条数据
