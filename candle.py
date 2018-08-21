@@ -36,8 +36,8 @@ class SyncCandle(BaseSync):
             if st == time_spot:
                 print('开始获取1440条数据kline数据：一天获取一次')
                 self.sync_kline(*args)
-                time.sleep(86400)  # 24*60*60
-            time.sleep(0.1)
+                #time.sleep(86400)  # 24*60*60
+            time.sleep(1)
 
 
 if __name__ == '__main__':

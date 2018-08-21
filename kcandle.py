@@ -21,15 +21,12 @@ class SyncMDCandle(BaseSync):
 
     def run(self, *args):
         while True:
-            st = time.strftime('%H:%M:%S', time.localtime())
-            if st == time_spot:
-                print('开始获取kline数据：')
-                self.sync_kline(*args)
-                if self.solution == 'M1':  # 1分 默认获得150条数据
-                    time.sleep(9000)  # 150*60 = 9000
-                elif self.solution == 'D1':  # 1天 默认传回102条数据
-                    time.sleep(6120)  # 102*60
-            time.sleep(0.1)
+            print('开始获取kline数据：')
+            self.sync_kline(*args)
+            if self.solution == 'M1':  # 1分 默认获得150条数据
+                time.sleep(9000)  # 150*60 = 9000
+            elif self.solution == 'D1':  # 1天 默认传回102条数据
+                time.sleep(6120)  # 102*60
 
     # 取K线数据
     def sync_kline(self, *args):
