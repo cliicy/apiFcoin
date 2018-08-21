@@ -9,7 +9,6 @@ from enums import Platform
 from enums import PlatformDataType
 from fcoinsync import BaseSync
 from fcoinsync import datadir
-from config import time_spot
 
 
 class SyncMDCandle(BaseSync):

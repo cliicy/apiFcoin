@@ -6,5 +6,5 @@ sylist = ['btcusdt', 'bchusdt', 'ethusdt', 'ltcusdt', 'xrpusdt']  # ,  'ethbtc',
 kline_interval = '1m'
 default_solution = 'M1'
 time_spot = '23:59:00'
-#time_spot = '14:08:00'  # for test
+# time_spot = '16:21:00'  # for test
 

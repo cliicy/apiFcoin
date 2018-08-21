@@ -13,7 +13,8 @@ import json
 
 fcoin = Fcoin()
 fcoin.auth('key ', 'secret')
-datadir = os.path.join(os.path.abspath('..'), 'data')
+
+datadir = '/yanjiuyuan/data' if os.environ.get("SHELL", "") else os.path.join(os.path.abspath('..'), 'data')
 
 
 class BaseSync(object):
