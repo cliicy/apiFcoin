@@ -9,6 +9,7 @@ from config import restapi
 from enums import Platform
 from enums import Symbol
 from fcoin import Fcoin
+from config import time_spot
 import csv
 import time
 import json
@@ -50,16 +51,34 @@ class BaseSync(object):
         # save original data to csv
         sfile = '{0}_{1}_{2}{3}'.format(self.data_type, stime, sym, '.csv')
         sfilepath = os.path.join(sdataDir, sfile)
+        nodes = 0
         rdata = fcoin.get_candle(solution, sym, **payload)  # 获取特定solution的kline数据
-        candleinfo = rdata['data']
+        # write original data to txt files
+        with open(sTfilepath, 'a+', encoding='utf-8') as tf:
+            tf.writelines(json.dumps(rdata) + '\n')
 
+        candleinfo = rdata['data']
+        # print(candleinfo)
+
+        before_time_spot = True
         sflag = 'open'
         rFind = False
-        # print('单次获取的数据量：%s' % len(candleinfo))
+        print('单次获取的数据量：%s' % len(candleinfo))
         for ones in candleinfo:
+            if nodes >= 1440:
+                break
             # print(ones)
             # 从服务器得到的数据中没有ts，只有id，根据文档要求，要把获取到数据的时间存入csv文件及数据库中
             ts = int(round(ones['id'] * 1000))
+            idv = time.strftime('%H:%M:%S', time.localtime(ones['id']))
+            # find the ones that ahead of the time_spot and ignore them
+            if before_time_spot is True:
+                if idv < time_spot:
+                    pass
+            if idv == time_spot:  # 找到 time_spot这个点的数据了 在time_spot之前的数据都要过滤掉
+                before_time_spot = False
+            nodes += 1
+            # find the ones that ahead of the time_spot and ignore them
             ticks = ts  # int(round(time.time() * 1000))
             ones['id'] = ts
             kklist = []
@@ -87,13 +106,8 @@ class BaseSync(object):
                     kklist.insert(9, 'vol')
                     kklist.insert(10, klist[5])
                     w.writerow(kklist)
-
                     self.additem2list(ts, vvlist, sym, solution, ones)
                     w.writerow(vvlist)
-
-        # write original data to txt files
-        with open(sTfilepath, 'a+', encoding='utf-8') as tf:
-            tf.writelines(json.dumps(rdata) + '\n')
 
     # add extral items to the original list
     @staticmethod
@@ -134,3 +148,9 @@ class BaseSync(object):
         console.setLevel(logging.INFO)
         console.setFormatter(formatter)
         self._log.addHandler(console)
+
+
+if __name__ == '__main__':
+    bs = BaseSync('kline', 'btcusdt')
+    bs.sync_kline('M1', 'btcusdt', {'limit': 1448}, 'M1All_kline')
+    pass

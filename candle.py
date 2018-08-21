@@ -7,13 +7,10 @@ D1 = 1天线，   取102天的数据
 """
 from enums import Platform
 from enums import PlatformDataType
-import os
 import sys
 from fcoinsync import BaseSync
-from fcoinsync import datadir
 import time
 from config import time_spot
-from config import exchange
 
 
 class SyncCandle(BaseSync):
@@ -26,7 +23,7 @@ class SyncCandle(BaseSync):
 
     def sync_kline(self, *args):
         self.solution = args[0]
-        payload = {'limit': 1440}
+        payload = {'limit': 1448}
         aparam = (args[0], args[1], payload, 'M1All_kline')
         self.bsync.sync_kline(*aparam)
 
