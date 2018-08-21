@@ -31,8 +31,7 @@ class SyncMDCandle(BaseSync):
     def sync_kline(self, *args):
         self.solution = args[0]
         payload = {}
-        sdir = os.path.join(datadir, 'rest_http', 'kline')
-        aparam = (args[0], args[1], payload, sdir)
+        aparam = (args[0], args[1], payload, 'm1kline')
         self.bsync.sync_kline(*aparam)
 
 

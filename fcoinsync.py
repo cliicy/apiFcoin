@@ -4,6 +4,8 @@
 import logging
 import os
 from config import kline_interval
+from config import exchange
+from config import restapi
 from enums import Platform
 from enums import Symbol
 from fcoin import Fcoin
@@ -33,9 +35,10 @@ class BaseSync(object):
         solution = args[0]
         sym = args[1]
         payload = args[2]
-        sdir = args[3]
+        sflag = args[3]
         stime = time.strftime('%Y%m%d', time.localtime())
-        sdataDir = os.path.join(sdir, stime, solution)
+        sdir = os.path.join(datadir, stime, exchange, restapi, sflag)
+        sdataDir = os.path.join(sdir, solution)
 
         # print(sdataDir)
         if not os.path.exists(sdataDir):
