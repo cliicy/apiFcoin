@@ -12,7 +12,7 @@ def run_task():
     for sy in config.sylist:
         try:
             greenlets.append(gevent.spawn(SyncCandle().run, 'M1', sy))
-            greenlets.append(gevent.spawn(SyncMDCandle().run, 'M1', sy))
+            # greenlets.append(gevent.spawn(SyncMDCandle().run, 'M1', sy))
         except Exception as e:
             print(e)
     gevent.joinall(greenlets)

@@ -19,8 +19,15 @@ class Test(threading.Thread):
 
 
 # test...
-a = Test()
-a.run()
+# a = Test()
+# a.run()
+dateFormat = "%Y-%m-%d %H:%M:%S"
+time_spot = '17:36:0'  # for test
+sday = time.strftime('%Y-%m-%d', time.localtime())
+stime = '{}{}{}'.format(sday, ' ', time_spot)
+tt = time.strptime(stime, dateFormat)
+secs = int(time.mktime(tt))
+print(secs)
 
 
 # import threading

@@ -7,6 +7,7 @@ exchange = 'fcoin'
 restapi = 'rest_http'
 kline_interval = '1m'
 default_solution = 'M1'
-time_spot = '23:59:00'
-# time_spot = '16:59:00'  # for test
+time_spot = '23:59:59'
+# time_spot = '21:46:59'  # for test
+dateFormat = "%Y%m%d %H:%M:%S"
 

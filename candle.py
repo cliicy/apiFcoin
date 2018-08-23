@@ -23,12 +23,13 @@ class SyncCandle(BaseSync):
 
     def sync_kline(self, *args):
         self.solution = args[0]
-        payload = {'limit': 1448}
+        payload = {'limit': 1446}
         aparam = (args[0], args[1], payload, 'M1All_kline')
         self.bsync.sync_kline(*aparam)
 
     def run(self, *args):
         while True:
+            # self.sync_kline(*args) only for test
             st = time.strftime('%H:%M:%S', time.localtime())
             if st == time_spot:
                 print('开始获取1440条数据kline数据：一天获取一次')
@@ -41,4 +42,7 @@ if __name__ == '__main__':
     print(sys.argv)
     SOLUTION = sys.argv[1]
     SYM = sys.argv[2]
+    pram = (SOLUTION, SYM)
+    sc = SyncCandle()
+    sc.sync_kline(*pram)
 

@@ -10,6 +10,7 @@ from enums import Platform
 from enums import Symbol
 from fcoin import Fcoin
 from config import time_spot
+from config import dateFormat
 import csv
 import time
 import json
@@ -38,6 +39,10 @@ class BaseSync(object):
         payload = args[2]
         sflag = args[3]
         stime = time.strftime('%Y%m%d', time.localtime())
+        stme = '{}{}{}'.format(stime, ' ', time_spot)
+        tt = time.strptime(stme, dateFormat)
+        sp_time = int(time.mktime(tt))
+
         sdir = os.path.join(datadir, stime, exchange, restapi, sflag)
         sdataDir = os.path.join(sdir, solution)
 
@@ -60,7 +65,6 @@ class BaseSync(object):
         candleinfo = rdata['data']
         # print(candleinfo)
 
-        before_time_spot = True
         sflag = 'open'
         rFind = False
         print('单次获取的数据量：%s' % len(candleinfo))
@@ -70,14 +74,14 @@ class BaseSync(object):
             # print(ones)
             # 从服务器得到的数据中没有ts，只有id，根据文档要求，要把获取到数据的时间存入csv文件及数据库中
             ts = int(round(ones['id'] * 1000))
-            idv = time.strftime('%H:%M:%S', time.localtime(ones['id']))
+            # idv = time.strftime('%H:%M:%S', time.localtime(ones['id']))
             # find the ones that ahead of the time_spot and ignore them
-            if before_time_spot is True:
-                if idv < time_spot:
-                    pass
-            if idv == time_spot:  # 找到 time_spot这个点的数据了 在time_spot之前的数据都要过滤掉
-                before_time_spot = False
-            nodes += 1
+            # if before_time_spot is True:
+            if ones['id'] > sp_time:
+                idv = time.strftime('%H:%M:%S', time.localtime(ones['id']))
+                print('will pass %s' % idv)
+                continue
+            # if idv == time_spot:  # 找到 time_spot这个点的数据了 在time_spot之前的数据都要过滤掉
             # find the ones that ahead of the time_spot and ignore them
             ticks = ts  # int(round(time.time() * 1000))
             ones['id'] = ts
@@ -108,6 +112,7 @@ class BaseSync(object):
                     w.writerow(kklist)
                     self.additem2list(ts, vvlist, sym, solution, ones)
                     w.writerow(vvlist)
+                nodes += 1
 
     # add extral items to the original list
     @staticmethod
@@ -151,6 +156,6 @@ class BaseSync(object):
 
 
 if __name__ == '__main__':
-    bs = BaseSync('kline', 'btcusdt')
-    bs.sync_kline('M1', 'btcusdt', {'limit': 1448}, 'M1All_kline')
+    # bs = BaseSync('kline', 'btcusdt')
+    # bs.sync_kline('M1', 'btcusdt', {'limit': 1448}, 'M1All_kline')
     pass
