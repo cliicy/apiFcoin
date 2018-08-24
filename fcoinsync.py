@@ -39,7 +39,7 @@ class BaseSync(object):
         payload = args[2]
         sflag = args[3]
         stime = time.strftime('%Y%m%d', time.localtime())
-        stme = '{}{}{}'.format(stime, ' ', time_spot)
+        stme = '{0}{1}{2}'.format(stime, ' ', time_spot)
         tt = time.strptime(stme, dateFormat)
         sp_time = int(time.mktime(tt))
 
