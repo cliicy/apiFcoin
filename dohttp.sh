@@ -1,5 +1,4 @@
 #! /bin/bash
 
 
-nohup python frworker.py > /dev/null 2>&1 &
-
+nohup python frworker.py > frestkline.log 2>&1 &
